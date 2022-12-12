@@ -1,8 +1,14 @@
 # %%
 import pandas as pd
 
+import functions
+import importlib
+importlib.reload(functions)
+from functions import *
+
 #["Text"].apply(lambda e: len(e)).describe()
-pd.read_csv("data/BBC News Train.csv")
+news = pd.read_csv("data/BBC News Train.csv")
+news
 # %%
 
 news = pd.read_csv("data/BBC News Train.csv")
@@ -28,4 +34,54 @@ sample = news.groupby("Category").apply(lambda e: e.sample(30, random_state=42))
 print(sample['Short'].value_counts())
 print(sample['Category'].value_counts())
 sample.describe()
+
 # %%
+news = pd.read_csv("data/BBC News Train.csv")
+news, category = extract_categories(news)
+news = create_short_long(news)
+news = create_specific_general(news)
+sample = make_sample(news)
+
+# %%
+sample
+# %%
+sample = news.groupby("Category").apply(lambda e: e.sample(30, random_state=42)).reset_index(drop=True)
+sample
+# %%
+
+sample = make_sample(news)
+sample
+# %%
+sample
+# %%
+news = pd.read_csv("data/BBC News Train.csv")
+categories = news["Category"].unique()
+category = type("Category", (), dict(zip(categories, range(len(categories)))))
+
+# %%
+
+categories = [c.capitalize() for c in categories]
+categories
+# %%
+for c in categories:
+    news[c] = news["Category"].apply(lambda e: str(e).lower() == str(c).lower())
+
+# %%
+news[categories] = pd.DataFrame(news["Category"].apply(lambda e: {c: e == c for c in categories}))
+news
+# %%
+news["Category"].apply(lambda e: {c: e == c for c in categories})
+
+# %%
+news
+# %%
+news, CATEGORY = extract_categories(news)
+# %%
+news
+# %%
+news = pd.read_csv("data/BBC News Train.csv")
+news, CATEGORY = extract_categories(news)
+news = create_short_long(news)
+news = create_specific_general(news)
+news = remove_unnecessary_columns(news)
+sample = make_sample(news)
