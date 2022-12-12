@@ -11,4 +11,7 @@ def extract_categories(df):
     categories = df["Category"].unique()
     category = type("Category", (), dict(zip(categories, range(len(categories)))))
     df["Category"] = df["Category"].apply(lambda e: category.__dict__[e])
-    return df
+    return df, category
+
+def extract_keywords(df):
+    return df, []
