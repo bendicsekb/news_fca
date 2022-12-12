@@ -13,5 +13,7 @@ def extract_categories(df):
     df["Category"] = df["Category"].apply(lambda e: category.__dict__[e])
     return df, category
 
-def extract_keywords(df):
-    return df, []
+def create_specific_general(df):
+    df["Specific"] = [True] * len(df)
+    df["General"] = df["Specific"].__neg__()
+    return df
