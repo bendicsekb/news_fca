@@ -83,5 +83,37 @@ news = pd.read_csv("data/BBC News Train.csv")
 news, CATEGORY = extract_categories(news)
 news = create_short_long(news)
 news = create_specific_general(news)
-news = remove_unnecessary_columns(news)
 sample = make_sample(news)
+sample = remove_unnecessary_columns(sample)
+sample.set_index("ArticleId", inplace=True)
+sample
+
+# %%
+
+# %%
+sample["ArticleId"]
+# %%
+sample.index
+
+# %%
+"\n".join(["B\n"] + [str(s) for s in sample.shape] + sample.index.astype(str).to_list() + sample.columns.astype(str).to_list())
+
+# %%
+...(sample.shape)
+# %%
+list(sample.shape)
+# %%
+["B"] + ["\n"] + [str(s) for s in sample.shape]
+
+# %%
+
+# %%
+with open("data/sample.txt", "w") as f:
+    f.write("\n".join(["B\n"] + [str(s) for s in sample.shape] + [""] + sample.index.astype(str).to_list() + sample.columns.astype(str).to_list() + [""]))
+    for i in sample.index:
+        for c in sample.columns:
+            f.write("X" if sample.loc[i, c] else ".")
+        f.write("\n")
+# %%
+write_cxt(sample, "data/sample.cxt")
+# %%

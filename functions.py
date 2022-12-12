@@ -28,3 +28,12 @@ def create_specific_general(df: DataFrame):
 def remove_unnecessary_columns(df: DataFrame):
     """Remove the columns that are not necessary for formal concept analysis"""
     return df.drop(columns=["Category", "Text"])
+
+def write_cxt(df: DataFrame, filename: str):
+    """Write a cxt file from a dataframe"""
+    with open(filename, "w") as f:
+        f.write("\n".join(["B\n"] + [str(s) for s in df.shape] + [""] + df.index.astype(str).to_list() + df.columns.astype(str).to_list() + [""]))
+        for i in df.index:
+            for c in df.columns:
+                f.write("X" if df.loc[i, c] else ".")
+            f.write("\n")
