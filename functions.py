@@ -1,4 +1,10 @@
 from pandas import DataFrame
+import yake
+
+
+
+
+
 def make_sample(df: DataFrame, n=30, random_state=42):
     """Make a sample of n elements from each category in the dataset"""
     return df.groupby("Category").apply(lambda e: e.sample(n, random_state=random_state)).reset_index(drop=True)
@@ -21,7 +27,19 @@ def extract_categories(df: DataFrame):
 
 def create_specific_general(df: DataFrame):
     """Create a new column 'specific' where the value is True if the category is specific"""
-    df["Specific"] = [True] * len(df)
+    specific=[]
+    for data in df['Text'].to_list():
+        kw_extractor = yake.KeywordExtractor()
+        keywords = kw_extractor.extract_keywords(data)
+        countkey=0
+        for kw in keywords:
+            if kw[1]>0.05:
+                countkey=countkey+1
+        if countkey>10:
+            specific.append(True)
+        else:
+            specific.append(False)
+    df["Specific"] = specific
     df["General"] = df["Specific"].__neg__()
     return df
 
